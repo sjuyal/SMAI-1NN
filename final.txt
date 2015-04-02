@@ -1,0 +1,250 @@
+Code for 1NN Classification (Code for IRIS is given. for rest it is just minor modifications)
+
+
+# Shashank Juyal
+# Roll :201305537
+# Assign1: 1 NN classification
+
+import matplotlib.pyplot as plt
+from pandas import *
+import csv
+import random
+import math
+import operator
+
+
+# Function for finding (first) nearest neighbour
+# euclidean distance is used as a distance matrix
+def find1NN(trset, test):
+	dislist = []
+	length = len(test)-1
+	for x in range(len(trset)):
+		distance = 0
+		# Euclidean Distance with the data present in the test
+		for j in range(length):
+			distance += pow((test[j] - trset[x][j]), 2)
+		dist = math.sqrt(distance)
+		dislist.append((trset[x], dist))
+	dislist.sort(key=operator.itemgetter(1))
+	nearest = []
+	nearest.append(dislist[0][0])
+	return nearest
+
+# Function to load the data and dividing 
+# the data according to the given split value
+def init(filename, split, trainset=[] , testSet=[]):
+	with open(filename, 'rb') as csvfile:
+	    lines = csv.reader(csvfile)
+	    dataset = list(lines)
+	    for i in range(len(dataset)-1):
+	        for j in range(4):
+	            dataset[i][j] = float(dataset[i][j])
+	        if random.random() < split:
+	            trainset.append(dataset[i])
+	        else:
+	            testSet.append(dataset[i])
+
+# Main funtion
+def main():
+	splitvalues=[0.5] #[0.25,0.3,0.35,0.40,0.45,0.5,0.55,0.6,0.65,0.7]
+	sumAccuracy = 0
+	acculist = []
+	print('\n-------------Running the 1NN classifier-----------\n')
+	for i in range(len(splitvalues)):
+		trainset=[]
+		testSet=[]
+		split = splitvalues[i]
+		init('iris.data', split, trainset, testSet)
+		dict={}
+		count = 0
+		
+		# Confusion Matrix
+		se = {'Iris-versicolor': 0, 'Iris-virginica': 0, 'Iris-setosa' : 0}
+		ve = {'Iris-versicolor': 0, 'Iris-virginica': 0, 'Iris-setosa' : 0}
+		vi = {'Iris-versicolor': 0, 'Iris-virginica': 0, 'Iris-setosa' : 0}
+		dict = {'Iris-versicolor': ve, 'Iris-virginica': vi, 'Iris-setosa': se}
+		petalWidth = []
+		sepalWidth = []
+		for x in range(len(testSet)):
+			nearestneighbor = find1NN(trainset, testSet[x])
+			result = nearestneighbor[0][-1]
+			#print('predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+			if testSet[x][-1] == result:
+				count += 1
+			petalWidth.append(testSet[x][3])
+			sepalWidth.append(testSet[x][1])
+			dict[result][testSet[x][-1]] += 1
+			if result == 'Iris-setosa':
+				#ro, = plt.plot(testSet[x][3], testSet[x][1], 'ro')
+				plt.scatter(testSet[x][3], testSet[x][1], color='red',linewidth =8)
+			elif result == 'Iris-virginica':
+				#bo, = plt.plot(testSet[x][3], testSet[x][1], 'bo')
+				plt.scatter(testSet[x][3], testSet[x][1], color='green', linewidths=8)
+			else:
+				#go, = plt.plot(testSet[x][3], testSet[x][1], 'go')
+				plt.scatter(testSet[x][3], testSet[x][1], color='blue', linewidths=8)
+		plt.axis([0, 3, 0, 5])
+		plt.xlabel('petal width(cm)')
+		plt.ylabel('sepal width(cm)')
+		plt.show()
+		
+		accuracy = (count/float(len(testSet))) * 100.0
+		sumAccuracy += accuracy
+		acculist.append(accuracy)
+		print('\nRows are : '),
+		for key1 in dict:
+			print key1,
+		print('')
+		for key1 in dict:
+    			for key2 in dict[key1]:
+        			print( repr(dict[key1][key2]) + ' '),
+			print('')
+		print('Run:' + repr(i+1) + '---- Split:' + repr(split) + ' ---- Accuracy: ' + repr(accuracy) + '%')
+	mean = sumAccuracy/len(splitvalues)
+	sigma = 0
+	#print(acculist)
+	for i in range(len(splitvalues)):
+		sigma += pow((float(acculist[i])-mean),2)
+	stdev = math.sqrt(sigma/len(splitvalues))
+	print('\n----------------Final Results----------------')
+	print('Mean               : '+ repr(mean) + '\nStandard Deviation : ' + repr(stdev))
+	print('Variance           : '+ repr(pow(stdev,2)))
+main()
+
+
+
+
+1) IRIS dataset
+URL: http://archive.ics.uci.edu/ml/datasets/Iris
+Number of Instances: 150 (50 in each of three classes)
+Number of Attributes: 4 numeric, predictive attributes and the class
+Attribute Information:
+   1. sepal length in cm
+   2. sepal width in cm
+   3. petal length in cm
+   4. petal width in cm
+   5. class: 
+      -- Iris Setosa
+      -- Iris Versicolour
+      -- Iris Virginica
+Distance Function: Euclidean
+
+Output:
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 93.91304347826087%
+Run:2---- Split:0.3 ---- Accuracy: 90.65420560747664%
+Run:3---- Split:0.35 ---- Accuracy: 94.5054945054945%
+Run:4---- Split:0.4 ---- Accuracy: 95.55555555555556%
+Run:5---- Split:0.45 ---- Accuracy: 93.58974358974359%
+Run:6---- Split:0.5 ---- Accuracy: 95.8904109589041%
+Run:7---- Split:0.55 ---- Accuracy: 91.52542372881356%
+Run:8---- Split:0.6 ---- Accuracy: 93.22033898305084%
+Run:9---- Split:0.65 ---- Accuracy: 96.15384615384616%
+Run:10---- Split:0.7 ---- Accuracy: 93.18181818181817%
+
+----------------Final Results----------------
+Mean               : 93.8189880742964
+Standard Deviation : 1.7126401794819868
+Variance           : 2.933136384376092
+
+Confusion matrix: s
+Rows are :  Iris-virginica Iris-setosa Iris-versicolor 
+27  0  1  
+0  20  0  
+2  0  21
+
+2) Yeast dataset
+URL: http://archive.ics.uci.edu/ml/machine-learning-databases/yeast/
+Number of Instances:  1484 for the Yeast dataset.
+Number of Attributes.
+         for Yeast dataset:   9 ( 8 predictive, 1 name )
+Attribute Information.
+  1.  Sequence Name: Accession number for the SWISS-PROT database
+  2.  mcg: McGeoch's method for signal sequence recognition.
+  3.  gvh: von Heijne's method for signal sequence recognition.
+  4.  alm: Score of the ALOM membrane spanning region prediction program.
+  5.  mit: Score of discriminant analysis of the amino acid content of
+	   the N-terminal region (20 residues long) of mitochondrial and 
+           non-mitochondrial proteins.
+  6.  erl: Presence of "HDEL" substring (thought to act as a signal for
+	   retention in the endoplasmic reticulum lumen). Binary attribute.
+  7.  pox: Peroxisomal targeting signal in the C-terminus.
+  8.  vac: Score of discriminant analysis of the amino acid content of
+           vacuolar and extracellular proteins.
+  9.  nuc: Score of discriminant analysis of nuclear localization signals
+	   of nuclear and non-nuclear proteins.
+
+Output:
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 60.41069809610154%
+Run:2---- Split:0.3 ---- Accuracy: 60.08212560386473%
+Run:3---- Split:0.35 ---- Accuracy: 60.58572949946751%
+Run:4---- Split:0.4 ---- Accuracy: 61.87224669603524%
+Run:5---- Split:0.45 ---- Accuracy: 60.87064676616916%
+Run:6---- Split:0.5 ---- Accuracy: 60.20463847203275%
+Run:7---- Split:0.55 ---- Accuracy: 61.701492537313435%
+Run:8---- Split:0.6 ---- Accuracy: 61.182432432432435%
+Run:9---- Split:0.65 ---- Accuracy: 63.62595419847328%
+Run:10---- Split:0.7 ---- Accuracy: 61.31578947368421%
+
+----------------Final Results----------------
+Mean               : 60.78517537755742
+Standard Deviation : 1.266457847299483
+Variance           : 1.6039154789864405
+
+Rows are :  POX ME1 EXC ME3 CYT ERL VAC ME2 NUC MIT 
+6  0   0  0   3    0  0  0  0    3  
+1  11  2  2   0    0  1  3  0    1  
+0  2   6  0   0    0  1  5  0    4  
+0  1   0  52  8    0  0  1  9    8  
+3  0   3  6   128  0  4  5  63   26  
+0  0   0  0   0    20  0  0  0    0  
+0  0   0  3   6    0  1  0  0    0  
+0  1   2  6   2    0  1  8  1    2  
+1  0   0  14  20   0  4  3  105  20  
+0  0   0  6   26   0  5  4  10   64 
+
+
+My Observations:
+Here in this dataset, the most important feature is a categorical attribute not a numerical one. Hence omitting that results into decrease in accuracy. That is why accuracy obtained are less
+
+3) Balance-Scale dataset
+URL: http://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/
+Number of Instances: 625 (49 balanced, 288 left, 288 right)
+Number of Attributes: 4 (numeric) + class name = 5
+Attribute Information:
+	1. Class Name: 3 (L, B, R)
+	2. Left-Weight: 5 (1, 2, 3, 4, 5)
+	3. Left-Distance: 5 (1, 2, 3, 4, 5)
+	4. Right-Weight: 5 (1, 2, 3, 4, 5)
+	5. Right-Distance: 5 (1, 2, 3, 4, 5)
+Distance Function: Euclidean
+
+Output:
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 80.04291845493562%
+Run:2---- Split:0.3 ---- Accuracy: 78.07228915662651%
+Run:3---- Split:0.35 ---- Accuracy: 75.1219512195122%
+Run:4---- Split:0.4 ---- Accuracy: 78.68852459016394%
+Run:5---- Split:0.45 ---- Accuracy: 78.72340425531915%
+Run:6---- Split:0.5 ---- Accuracy: 78.54889589905363%
+Run:7---- Split:0.55 ---- Accuracy: 75.42087542087542%
+Run:8---- Split:0.6 ---- Accuracy: 72.9957805907173%
+Run:9---- Split:0.65 ---- Accuracy: 78.35497835497836%
+Run:10---- Split:0.7 ---- Accuracy: 78.53107344632768%
+
+----------------Final Results----------------
+Mean               : 77.45006913885098
+Standard Deviation : 2.069745816827866
+Variance           : 4.28384774627645
+
+Rows are :  R B L 
+119  16  13  
+8  15  5  
+6  6  89 

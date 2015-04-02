@@ -1,0 +1,57 @@
+>>>>>>>>>IRIS dataset
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 94.73684210526315%
+Run:2---- Split:0.3 ---- Accuracy: 91.81818181818183%
+Run:3---- Split:0.35 ---- Accuracy: 96.03960396039604%
+Run:4---- Split:0.4 ---- Accuracy: 94.73684210526315%
+Run:5---- Split:0.45 ---- Accuracy: 94.9367088607595%
+Run:6---- Split:0.5 ---- Accuracy: 94.11764705882352%
+Run:7---- Split:0.55 ---- Accuracy: 98.52941176470588%
+Run:8---- Split:0.6 ---- Accuracy: 96.61016949152543%
+Run:9---- Split:0.65 ---- Accuracy: 91.07142857142857%
+Run:10---- Split:0.7 ---- Accuracy: 93.02325581395348%
+
+----------------Final Results----------------
+Mean               : 94.56200915503005
+Standard Deviation : 2.1118244342941668
+
+
+>>>>>>>>>Yeast Dataset http://archive.ics.uci.edu/ml/machine-learning-databases/yeast/
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 61.91256830601093%
+Run:2---- Split:0.3 ---- Accuracy: 60.71090047393365%
+Run:3---- Split:0.35 ---- Accuracy: 69.53751284686537%
+Run:4---- Split:0.4 ---- Accuracy: 69.26052332195677%
+Run:5---- Split:0.45 ---- Accuracy: 60.669914738124234%
+Run:6---- Split:0.5 ---- Accuracy: 61.439790575916234%
+Run:7---- Split:0.55 ---- Accuracy: 61.23367198838898%
+Run:8---- Split:0.6 ---- Accuracy: 60.668896321070235%
+Run:9---- Split:0.65 ---- Accuracy: 68.25046040515654%
+Run:10---- Split:0.7 ---- Accuracy: 62.42290748898678%
+
+----------------Final Results----------------
+Mean               : 63.61071464664097
+Standard Deviation : 1.2090001800333363
+
+>>>>>>>>>Balance-Scale Dataset  http://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/
+
+-------------Running the 1NN classifier-----------
+
+Run:1---- Split:0.25 ---- Accuracy: 80.04246284501062%
+Run:2---- Split:0.3 ---- Accuracy: 80.41958041958041%
+Run:3---- Split:0.35 ---- Accuracy: 78.28282828282829%
+Run:4---- Split:0.4 ---- Accuracy: 79.34508816120906%
+Run:5---- Split:0.45 ---- Accuracy: 80.7017543859649%
+Run:6---- Split:0.5 ---- Accuracy: 76.01246105919003%
+Run:7---- Split:0.55 ---- Accuracy: 81.07142857142857%
+Run:8---- Split:0.6 ---- Accuracy: 77.18631178707224%
+Run:9---- Split:0.65 ---- Accuracy: 81.90045248868778%
+Run:10---- Split:0.7 ---- Accuracy: 78.89447236180904%
+
+----------------Final Results----------------
+Mean               : 79.38568403627809
+Standard Deviation : 1.734163648512201

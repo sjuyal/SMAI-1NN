@@ -1,0 +1,5 @@
+sepal length in cm,continuous
+sepal width in cm,continuous
+petal length in cm,continuous
+petal width in cm,continuous
+class,discrete
